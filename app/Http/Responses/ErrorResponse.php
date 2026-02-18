@@ -21,8 +21,7 @@ class ErrorResponse extends BaseResponse
     protected function makeResponseData(): ?array
     {
         return [
-            'success' => false,
-            'error' => $this->message,
+            'message' => $this->message,
         ];
     }
 }
