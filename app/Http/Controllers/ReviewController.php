@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Responses\ErrorResponse;
+use App\Http\Responses\SuccessResponse;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
@@ -11,7 +13,15 @@ class ReviewController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $data = [
+                'someData' => '',
+            ];
+            return new SuccessResponse($data);
+
+        } catch (\Throwable $e) {
+            return new ErrorResponse($e);
+        }
     }
 
     /**
@@ -19,7 +29,15 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $data = [
+                'someData' => '',
+            ];
+            return new SuccessResponse($data);
+
+        } catch (\Throwable $e) {
+            return new ErrorResponse($e);
+        }
     }
 
     /**
@@ -27,7 +45,15 @@ class ReviewController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+            $data = [
+                'someData' => '',
+            ];
+            return new SuccessResponse($data);
+
+        } catch (\Throwable $e) {
+            return new ErrorResponse($e);
+        }
     }
 
     /**
@@ -35,7 +61,15 @@ class ReviewController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $data = [
+                'someData' => '',
+            ];
+            return new SuccessResponse($data);
+
+        } catch (\Throwable $e) {
+            return new ErrorResponse($e);
+        }
     }
 
     /**
@@ -43,6 +77,14 @@ class ReviewController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $data = [
+                'someData' => '',
+            ];
+            return new SuccessResponse($data);
+
+        } catch (\Throwable $e) {
+            return new ErrorResponse($e);
+        }
     }
 }
