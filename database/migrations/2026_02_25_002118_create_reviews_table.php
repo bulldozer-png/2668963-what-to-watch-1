@@ -17,8 +17,8 @@ return new class extends Migration
 
             $table->foreignId('film_id')->constrained();
             $table->text('comment');
-            $table->string('author');
-            $table->string('rating');
+            $table->foreignId('author_id')->constrained('users');
+            $table->string('rating')->nullable();
 
             $table->primary('id');
         });
