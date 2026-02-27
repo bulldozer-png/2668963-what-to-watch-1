@@ -9,4 +9,10 @@ class Genre extends Model
 {
     /** @use HasFactory<\Database\Factories\GenreFactory> */
     use HasFactory;
+
+    public function films()
+    {
+        return $this->belongsToMany(Film::class, 'film_genre', 'genre_id', 'film_id');
+
+    }
 }
