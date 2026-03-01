@@ -9,4 +9,16 @@ class Review extends Model
 {
     /** @use HasFactory<\Database\Factories\ReviewFactory> */
     use HasFactory;
+
+    protected $fillable = ['comment', 'author_id', 'film_id'];
+
+    public function film()
+    {
+        return $this->belongsTo(Film::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'author_id');
+    }
 }

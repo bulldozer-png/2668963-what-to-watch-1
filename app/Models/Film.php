@@ -9,4 +9,14 @@ class Film extends Model
 {
     /** @use HasFactory<\Database\Factories\FilmFactory> */
     use HasFactory;
+
+    public function genres()
+    {
+        return $this->belongsToMany(Genre::class, 'film_genre', 'film_id', 'genre_id');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

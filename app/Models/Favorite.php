@@ -9,4 +9,14 @@ class Favorite extends Model
 {
     /** @use HasFactory<\Database\Factories\FavoriteFactory> */
     use HasFactory;
+
+    public function films()
+    {
+        return $this->hasMany(Film::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
