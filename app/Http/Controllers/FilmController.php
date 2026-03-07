@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FilmStoreRequest;
 use App\Http\Responses\ErrorResponse;
 use App\Http\Responses\SuccessResponse;
+use App\Services\FilmStoreService;
 use Illuminate\Http\Request;
 
 class FilmController extends Controller
 {
+    public function __construct(private FilmStoreService $filmStoreService) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -25,17 +29,15 @@ class FilmController extends Controller
         }
     }
 
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(FilmStoreRequest $request)
     {
-        //
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+            $film = $this->filmStoreService->store($request->validated());
+            return new SuccessResponse($film);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);

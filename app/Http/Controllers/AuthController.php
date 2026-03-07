@@ -5,38 +5,37 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Responses\SuccessResponse;
 use App\Http\Responses\ErrorResponse;
+use App\Services\AuthService;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
 {
-    public function register(){
-        try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+    public function __construct(private AuthService $authService) {}
 
+    public function register(RegisterRequest $request)
+    {
+        try {
+            $data = $this->authService->register($request->validated());
+            return new SuccessResponse($data);
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }
     }
-    public function login(){
+    public function login(LoginRequest $request)
+    {
         try {
-            $data = [
-                'someData' => '',
-            ];
+            $data = $this->authService->login($request->validated());
             return new SuccessResponse($data);
-
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }
     }
-    public function logout(){
+    public function logout()
+    {
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
-
+            $data = $this->authService->logout();
+            return new SuccessResponse($data, 204);
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }
