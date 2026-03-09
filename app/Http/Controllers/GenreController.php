@@ -63,7 +63,7 @@ class GenreController extends Controller
     {
         try {
             $data = [
-                'someData' => '',
+                'someData' => '1',
             ];
             return new SuccessResponse($data);
 

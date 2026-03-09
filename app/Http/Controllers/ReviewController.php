@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Responses\ErrorResponse;
 use App\Http\Responses\SuccessResponse;
+use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ReviewController extends Controller
 {
@@ -59,13 +61,16 @@ class ReviewController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Review $review)
     {
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+            Gate::authorize('update-review', $review);
+            $review->update($request->all());
+            
+            return response()->json($review);
+
+
+            // return new SuccessResponse($data);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
@@ -75,13 +80,15 @@ class ReviewController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Review $review)
     {
-        try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+        try {   
+            Gate::authorize('delete-review', $review);
+            $review->delete();
+
+            return response()->json(['deleted' => true]);
+            
+            // return new SuccessResponse($data);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
