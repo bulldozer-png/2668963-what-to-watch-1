@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Film;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,9 @@ class ReviewFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'comment' => fake()->sentence(),
+            'author_id' => User::factory(),
+            'film_id' => Film::factory(),
         ];
     }
 }
