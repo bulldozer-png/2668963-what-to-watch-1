@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FilmStoreRequest;
 use App\Http\Responses\ErrorResponse;
 use App\Http\Responses\SuccessResponse;
+use App\Models\Film;
 use App\Services\FilmStoreService;
 use Illuminate\Http\Request;
 
@@ -17,15 +18,15 @@ class FilmController extends Controller
      */
     public function index()
     {
-        // return response()->json(['ok' => true]);
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+            $films = Film::all();
+
+            return response()->json($films, 200);
 
         } catch (\Throwable $e) {
-            return new ErrorResponse($e);
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -37,7 +38,9 @@ class FilmController extends Controller
     {
         try {
             $film = $this->filmStoreService->store($request->validated());
-            return new SuccessResponse($film);
+            return response()->json($film, 201);
+            
+            // return new SuccessResponse($film);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
@@ -50,13 +53,14 @@ class FilmController extends Controller
     public function show(string $id)
     {
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+            $film = Film::find($id);
+
+            return response()->json($film, 200);
 
         } catch (\Throwable $e) {
-            return new ErrorResponse($e);
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 

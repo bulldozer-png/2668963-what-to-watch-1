@@ -7,9 +7,12 @@ use App\Http\Responses\SuccessResponse;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use App\Services\ReviewStoreService;
+use App\Http\Requests\ReviewStoreRequest;
 
 class ReviewController extends Controller
 {
+    public function __construct(private ReviewStoreService $reviewStoreService) {}
     /**
      * Display a listing of the resource.
      */
@@ -29,13 +32,12 @@ class ReviewController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ReviewStoreRequest $request)
     {
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+            $review = $this->reviewStoreService->store($request->validated());
+            return response()->json($review, 201);
+            
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
@@ -48,24 +50,25 @@ class ReviewController extends Controller
     public function show(string $id)
     {
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+            $reviews = Review::all();
+
+            return response()->json($reviews, 200);
 
         } catch (\Throwable $e) {
-            return new ErrorResponse($e);
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Review $review)
+    public function update(ReviewStoreRequest $request, Review $review)
     {
         try {
             Gate::authorize('update-review', $review);
-            $review->update($request->all());
+            $review->update($request->validate());
             
             return response()->json($review);
 
@@ -75,6 +78,9 @@ class ReviewController extends Controller
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }
+        // } catch (\Throwable $e) {
+        //     dd($e->getMessage());
+        // }
     }
 
     /**

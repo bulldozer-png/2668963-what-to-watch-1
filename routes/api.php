@@ -33,7 +33,7 @@ Route::get('/films/{id}/similar', [SimilarController::class, 'similar']);
 
 Route::get('/comments/{id}', [ReviewController::class, 'show']);
 Route::post('/comments/{id}', [ReviewController::class, 'store'])->middleware('auth:sanctum');
-Route::middleware(['auth:sanctum', 'moderator'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::patch('/comments/{comment}', [ReviewController::class, 'update']);
     Route::delete('/comments/{comment}', [ReviewController::class, 'destroy']);

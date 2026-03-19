@@ -22,7 +22,20 @@ class FilmStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'release_year' => 'required|integer',
+            'genre_id' => 'required|exists:genres,id',
+            'big_image' => 'required|string|max:255',
+            'small_image' => 'required|string|max:255',
+            'bg_image' => 'required|string|max:255',
+            'bg_color' => 'required|string|max:7',
+            'director' => 'required|string|max:255',
+            'cast_list' => 'required|string',
+            'duration_minutes' => 'required|integer',
+            'video_link' => 'required|string|max:255',
+            'trailer_link' => 'required|string|max:255',
+            'rating' => 'required|integer|min:1|max:10',
         ];
     }
 }

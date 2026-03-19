@@ -18,19 +18,19 @@ class FilmFactory extends Factory
     {
         return [
             'title' => fake()->sentence(),
-            'big_image' => fake()->sentence(),
-            'small_image' => fake()->sentence(),
-            'bg_image' => fake()->sentence(),
-            'bg_color' => fake()->sentence(),
+            'big_image' => fake()->imageUrl(),
+            'small_image' => fake()->imageUrl(),
+            'bg_image' => fake()->imageUrl(),
+            'bg_color' => fake()->hexColor(),
             'genre_id' => fake()->numberBetween(1, 3),
-            'director' => fake()->sentence(),
+            'director' => fake()->name(),
             'cast_list' => fake()->text(),
             'duration_minutes' => fake()->numberBetween(120, 180),
-            'video_link' => fake()->sentence(),
-            'trailer_link' => fake()->sentence(),
+            'video_link' => fake()->url(),
+            'trailer_link' => fake()->url(),
             'rating' => fake()->numberBetween(1, 5),
             
-            'description' => fake()->text(),
+            'description' => fake()->paragraph(),
             'release_year' => fake()->numberBetween(1990, 2024),
         ];
     }

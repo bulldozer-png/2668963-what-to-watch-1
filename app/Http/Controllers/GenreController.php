@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Responses\ErrorResponse;
 use App\Http\Responses\SuccessResponse;
+use App\Models\Genre;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class GenreController extends Controller
 {
@@ -14,13 +16,14 @@ class GenreController extends Controller
     public function index()
     {
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+            $genres = Genre::all();
+
+            return response()->json($genres, 200);
 
         } catch (\Throwable $e) {
-            return new ErrorResponse($e);
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -59,13 +62,15 @@ class GenreController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Genre $genre)
     {
         try {
-            $data = [
-                'someData' => '1',
-            ];
-            return new SuccessResponse($data);
+            Gate::authorize('update-genre');
+            $genre->update($request->all());
+            
+            return response()->json($genre);
+
+            // return new SuccessResponse($data);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
