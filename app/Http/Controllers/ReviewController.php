@@ -68,7 +68,7 @@ class ReviewController extends Controller
     {
         try {
             Gate::authorize('update-review', $review);
-            $review->update($request->validate());
+            $review->update($request->validated());
             
             return response()->json($review);
 

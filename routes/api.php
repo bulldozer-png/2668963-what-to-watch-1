@@ -35,8 +35,8 @@ Route::get('/comments/{id}', [ReviewController::class, 'show']);
 Route::post('/comments/{id}', [ReviewController::class, 'store'])->middleware('auth:sanctum');
 Route::middleware(['auth:sanctum'])->group(function () {
 
-    Route::patch('/comments/{comment}', [ReviewController::class, 'update']);
-    Route::delete('/comments/{comment}', [ReviewController::class, 'destroy']);
+    Route::patch('/comments/{review}', [ReviewController::class, 'update']);
+    Route::delete('/comments/{review}', [ReviewController::class, 'destroy']);
 
 });
 
