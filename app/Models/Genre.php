@@ -10,6 +10,8 @@ class Genre extends Model
     /** @use HasFactory<\Database\Factories\GenreFactory> */
     use HasFactory;
 
+    protected $fillable = ['genre_name'];
+
     public function films()
     {
         return $this->belongsToMany(Film::class, 'film_genre', 'genre_id', 'film_id');
