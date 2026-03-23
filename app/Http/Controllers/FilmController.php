@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FilmStoreRequest;
 use App\Http\Responses\ErrorResponse;
 use App\Http\Responses\SuccessResponse;
+use App\Jobs\UpdateFilmJob;
 use App\Models\Film;
 use App\Services\FilmStoreService;
 use Illuminate\Http\Request;
@@ -36,6 +37,7 @@ class FilmController extends Controller
      */
     public function store(FilmStoreRequest $request)
     {
+        UpdateFilmJob::dispatch('tt0848228');
         try {
             $film = $this->filmStoreService->store($request->validated());
             return response()->json($film, 201);

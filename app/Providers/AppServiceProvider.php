@@ -15,7 +15,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(\Psr\Http\Client\ClientInterface::class, function () {
+            return new \GuzzleHttp\Client();
+        });
+        $this->app->bind(\App\Interface\MovieRepositoryInterface::class, \App\Repositories\OmdbMovieRepository::class);
     }
 
     /**
