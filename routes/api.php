@@ -21,9 +21,13 @@ Route::get('/films', [FilmController::class, 'index']);
 Route::get('/films/{id}', [FilmController::class, 'show']);
 Route::post('/films', [FilmController::class, 'store'])->middleware(['auth:sanctum', 'moderator']);
 Route::patch('/films/{id}', [FilmController::class, 'update'])->middleware(['auth:sanctum', 'moderator']);
+Route::delete('/films/{id}', [FilmController::class, 'destroy'])->middleware(['auth:sanctum', 'moderator']);
 
 Route::get('/genres', [GenreController::class, 'index']);
+Route::post('/genres', [GenreController::class, 'store'])->middleware(['auth:sanctum', 'moderator']);
+Route::get('/genres/{id}', [GenreController::class, 'show']);
 Route::patch('/genres/{genre}', [GenreController::class, 'update'])->middleware(['auth:sanctum', 'moderator']);
+Route::delete('/genres/{id}', [GenreController::class, 'destroy'])->middleware(['auth:sanctum', 'moderator']);
 
 Route::get('/favorite', [FavoriteController::class, 'index'])->middleware('auth:sanctum');
 Route::post('/films/{id}/favorite', [FavoriteController::class, 'store'])->middleware('auth:sanctum');
@@ -31,13 +35,12 @@ Route::delete('/films/{id}/favorite', [FavoriteController::class, 'destroy'])->m
 
 Route::get('/films/{id}/similar', [SimilarController::class, 'similar']);
 
+Route::get('/comments', [ReviewController::class, 'index']);
 Route::get('/comments/{id}', [ReviewController::class, 'show']);
 Route::post('/comments/{id}', [ReviewController::class, 'store'])->middleware('auth:sanctum');
 Route::middleware(['auth:sanctum'])->group(function () {
-
     Route::patch('/comments/{review}', [ReviewController::class, 'update']);
     Route::delete('/comments/{review}', [ReviewController::class, 'destroy']);
-
 });
 
 Route::get('/promo', [PromoController::class, 'promoGet']);

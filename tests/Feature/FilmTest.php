@@ -121,10 +121,31 @@ class FilmTest extends TestCase
 
         $response = $this->actingAs($user)
             ->patchJson("/api/films/$film->id", [
-                'title' => 'Updated title'
+                'title' => 'Updated title',
             ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(200)
+            ->assertJsonFragment(['title' => 'Updated title']);
 
+        $this->assertDatabaseHas('films', [
+            'id' => $film->id,
+            'title' => 'Updated title',
+        ]);
+    }
+
+    public function test_moderator_can_delete_film()
+    {
+        $user = User::factory()->create(['role_id' => 2]);
+        $genre = Genre::factory()->create();
+        $film = Film::factory()->create(['genre_id' => $genre->id]);
+
+        $response = $this->actingAs($user)
+            ->deleteJson("/api/films/$film->id");
+
+        $response->assertStatus(204);
+
+        $this->assertDatabaseMissing('films', [
+            'id' => $film->id,
+        ]);
     }
 }

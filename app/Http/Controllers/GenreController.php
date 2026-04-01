@@ -33,10 +33,13 @@ class GenreController extends Controller
     public function store(Request $request)
     {
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+            $validated = $request->validate([
+                'genre_name' => 'required|string|max:255',
+            ]);
+
+            $genre = \App\Models\Genre::create($validated);
+
+            return response()->json($genre, 201);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
@@ -49,10 +52,8 @@ class GenreController extends Controller
     public function show(string $id)
     {
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+            $genre = \App\Models\Genre::with('films')->findOrFail($id);
+            return response()->json($genre, 200);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
@@ -83,10 +84,10 @@ class GenreController extends Controller
     public function destroy(string $id)
     {
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+            $genre = \App\Models\Genre::findOrFail($id);
+            $genre->delete();
+
+            return response()->json(null, 204);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);

@@ -37,12 +37,15 @@ class FilmController extends Controller
      */
     public function store(FilmStoreRequest $request)
     {
-        UpdateFilmJob::dispatch('tt0848228');
         try {
-            $film = $this->filmStoreService->store($request->validated());
+            $data = $request->validated();
+
+            if (! empty($data['imdb_id'])) {
+                UpdateFilmJob::dispatch($data['imdb_id']);
+            }
+
+            $film = $this->filmStoreService->store($data);
             return response()->json($film, 201);
-            
-            // return new SuccessResponse($film);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
@@ -72,10 +75,25 @@ class FilmController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+            $film = Film::findOrFail($id);
+            $film->update($request->only([
+                'title',
+                'description',
+                'release_year',
+                'genre_id',
+                'big_image',
+                'small_image',
+                'bg_image',
+                'bg_color',
+                'director',
+                'cast_list',
+                'duration_minutes',
+                'video_link',
+                'trailer_link',
+                'rating',
+            ]));
+
+            return response()->json($film, 200);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
@@ -88,10 +106,10 @@ class FilmController extends Controller
     public function destroy(string $id)
     {
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+            $film = Film::findOrFail($id);
+            $film->delete();
+
+            return response()->json(null, 204);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);

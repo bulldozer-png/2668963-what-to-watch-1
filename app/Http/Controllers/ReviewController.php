@@ -19,10 +19,8 @@ class ReviewController extends Controller
     public function index()
     {
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+            $reviews = Review::all();
+            return response()->json($reviews, 200);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
@@ -50,7 +48,7 @@ class ReviewController extends Controller
     public function show(string $id)
     {
         try {
-            $reviews = Review::all();
+            $reviews = Review::where('film_id', $id)->get();
 
             return response()->json($reviews, 200);
 
