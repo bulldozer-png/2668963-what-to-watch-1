@@ -35,16 +35,41 @@ class ReviewTest extends TestCase
         $response = $this->getJson("/api/comments/{$film->id}");
 
         $response->assertStatus(200)
-        ->assertJsonCount(3)
-        ->assertJsonStructure([
-            '*' => [
-                'id',
-                'author_id',
-                'film_id',
-                'rating',
-                'comment',
-            ]
+            ->assertJsonCount(3)
+            ->assertJsonStructure([
+                '*' => [
+                    'id',
+                    'author_id',
+                    'film_id',
+                    'rating',
+                    'comment',
+                ]
+            ]);
+    }
+
+    public function test_can_get_reviews_all()
+    {
+        $film = Film::factory()->create();
+        $user = User::factory()->create();
+
+        \App\Models\Review::factory()->count(2)->create([
+            'film_id' => $film->id,
+            'author_id' => $user->id,
         ]);
+
+        $response = $this->getJson('/api/comments');
+
+        $response->assertStatus(200)
+            ->assertJsonCount(2)
+            ->assertJsonStructure([
+                '*' => [
+                    'id',
+                    'author_id',
+                    'film_id',
+                    'rating',
+                    'comment',
+                ]
+            ]);
     }
 
     public function test_user_can_create_review()

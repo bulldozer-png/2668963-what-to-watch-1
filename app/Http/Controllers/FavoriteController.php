@@ -11,13 +11,11 @@ class FavoriteController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+            $favorites = $request->user()->favorites()->with('film')->get();
+            return response()->json($favorites, 200);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
@@ -27,13 +25,16 @@ class FavoriteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, string $id)
     {
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+            $user = $request->user();
+            $favorite = \App\Models\Favorite::firstOrCreate([
+                'user_id' => $user->id,
+                'film_id' => $id,
+            ]);
+
+            return response()->json($favorite, 201);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
@@ -43,13 +44,11 @@ class FavoriteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request, string $id)
     {
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+            $favorite = \App\Models\Favorite::where('user_id', $request->user()->id)->where('film_id', $id)->firstOrFail();
+            return response()->json($favorite, 200);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
@@ -62,10 +61,10 @@ class FavoriteController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+            $favorite = \App\Models\Favorite::where('user_id', $request->user()->id)->where('film_id', $id)->firstOrFail();
+            $favorite->update($request->only(['film_id', 'user_id']));
+
+            return response()->json($favorite, 200);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
@@ -75,13 +74,13 @@ class FavoriteController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
         try {
-            $data = [
-                'someData' => '',
-            ];
-            return new SuccessResponse($data);
+            $favorite = \App\Models\Favorite::where('user_id', $request->user()->id)->where('film_id', $id)->firstOrFail();
+            $favorite->delete();
+
+            return response()->json(null, 204);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);

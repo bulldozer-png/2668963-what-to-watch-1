@@ -83,4 +83,42 @@ class GenreTest extends TestCase
             'genre_name' => 'Drama'
         ]);
     }
+
+    public function test_moderator_can_create_genre()
+    {
+        $moderator = User::factory()->create(['role_id' => 2]);
+        Sanctum::actingAs($moderator);
+
+        $response = $this->postJson('/api/genres', [
+            'genre_name' => 'Thriller',
+        ]);
+
+        $response->assertStatus(201)
+            ->assertJsonFragment(['genre_name' => 'Thriller']);
+
+        $this->assertDatabaseHas('genres', ['genre_name' => 'Thriller']);
+    }
+
+    public function test_can_show_genre()
+    {
+        $genre = Genre::factory()->create(['genre_name' => 'Action']);
+
+        $response = $this->getJson("/api/genres/$genre->id");
+
+        $response->assertStatus(200)
+            ->assertJsonFragment(['genre_name' => 'Action']);
+    }
+
+    public function test_moderator_can_delete_genre()
+    {
+        $genre = Genre::factory()->create();
+        $moderator = User::factory()->create(['role_id' => 2]);
+        Sanctum::actingAs($moderator);
+
+        $response = $this->deleteJson("/api/genres/$genre->id");
+
+        $response->assertStatus(204);
+
+        $this->assertDatabaseMissing('genres', ['id' => $genre->id]);
+    }
 }

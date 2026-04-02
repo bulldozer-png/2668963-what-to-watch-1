@@ -26,6 +26,14 @@ class UpdateFilmJob implements ShouldQueue
 
         $data = $repository->findByImdbId($this->imdbId);
 
+        $year = intval($data['Year'] ?? 0);
+        if ($year < 1901 || $year > 2155) {
+            $year = 1901;
+        }
+
+        $rating = intval(round(floatval($data['imdbRating'] ?? 0)));
+        $rating = max(0, min(10, $rating));
+
         $film = Film::updateOrCreate(
             ['imdb_id' => $this->imdbId],
             [
@@ -36,13 +44,13 @@ class UpdateFilmJob implements ShouldQueue
                 'bg_image' => is_string($data['Poster'] ?? null) ? $data['Poster'] : 'no_image.jpg',
                 'bg_color' => '#000000',
                 'genre_id' => 1,
-                'release_year' => intval($data['Year'] ?? 0) ?: 1900,
+                'release_year' => $year,
                 'director' => $data['Director'] ?? 'Unknown',
                 'cast_list' => $data['Actors'] ?? 'Unknown',
                 'duration_minutes' => intval(preg_replace('/[^0-9]/', '', $data['Runtime'] ?? '0')) ?: 0,
                 'video_link' => 'no_link',
                 'trailer_link' => 'no_link',
-                'rating' => intval(round(floatval($data['imdbRating'] ?? 0))) ?: 0,
+                'rating' => $rating,
             ]
         );
     }
