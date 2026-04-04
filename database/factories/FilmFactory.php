@@ -30,7 +30,7 @@ class FilmFactory extends Factory
             'video_link' => fake()->url(),
             'trailer_link' => fake()->url(),
             'rating' => fake()->numberBetween(1, 5),
-            
+
             'description' => fake()->paragraph(),
             'release_year' => fake()->numberBetween(1990, 2024),
         ];

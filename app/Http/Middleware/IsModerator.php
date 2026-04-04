@@ -15,7 +15,8 @@ class IsModerator
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->user()->role->name !== 'moderator') {
+        $user = $request->user();
+        if ($user === null || $user->role?->name !== 'moderator') {
             abort(403);
         }
 

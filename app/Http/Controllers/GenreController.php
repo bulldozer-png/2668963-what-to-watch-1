@@ -19,7 +19,6 @@ class GenreController extends Controller
             $genres = Genre::all();
 
             return response()->json($genres, 200);
-
         } catch (\Throwable $e) {
             return response()->json([
                 'error' => $e->getMessage()
@@ -40,7 +39,6 @@ class GenreController extends Controller
             $genre = \App\Models\Genre::create($validated);
 
             return response()->json($genre, 201);
-
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }
@@ -54,7 +52,6 @@ class GenreController extends Controller
         try {
             $genre = \App\Models\Genre::with('films')->findOrFail($id);
             return response()->json($genre, 200);
-
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }
@@ -68,11 +65,10 @@ class GenreController extends Controller
         try {
             Gate::authorize('update-genre');
             $genre->update($request->all());
-            
+
             return response()->json($genre);
 
             // return new SuccessResponse($data);
-
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }
@@ -88,7 +84,6 @@ class GenreController extends Controller
             $genre->delete();
 
             return response()->json(null, 204);
-
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }

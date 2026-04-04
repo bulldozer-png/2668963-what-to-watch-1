@@ -14,9 +14,13 @@ class FavoriteController extends Controller
     public function index(Request $request)
     {
         try {
-            $favorites = $request->user()->favorites()->with('film')->get();
-            return response()->json($favorites, 200);
+            $user = $request->user();
+            if ($user === null) {
+                abort(401);
+            }
 
+            $favorites = $user->favorites()->with('film')->get();
+            return response()->json($favorites, 200);
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }
@@ -29,13 +33,16 @@ class FavoriteController extends Controller
     {
         try {
             $user = $request->user();
+            if ($user === null) {
+                abort(401);
+            }
+
             $favorite = \App\Models\Favorite::firstOrCreate([
                 'user_id' => $user->id,
                 'film_id' => $id,
             ]);
 
             return response()->json($favorite, 201);
-
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }
@@ -47,9 +54,13 @@ class FavoriteController extends Controller
     public function show(Request $request, string $id)
     {
         try {
-            $favorite = \App\Models\Favorite::where('user_id', $request->user()->id)->where('film_id', $id)->firstOrFail();
-            return response()->json($favorite, 200);
+            $user = $request->user();
+            if ($user === null) {
+                abort(401);
+            }
 
+            $favorite = \App\Models\Favorite::where('user_id', $user->id)->where('film_id', $id)->firstOrFail();
+            return response()->json($favorite, 200);
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }
@@ -61,11 +72,15 @@ class FavoriteController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $favorite = \App\Models\Favorite::where('user_id', $request->user()->id)->where('film_id', $id)->firstOrFail();
+            $user = $request->user();
+            if ($user === null) {
+                abort(401);
+            }
+
+            $favorite = \App\Models\Favorite::where('user_id', $user->id)->where('film_id', $id)->firstOrFail();
             $favorite->update($request->only(['film_id', 'user_id']));
 
             return response()->json($favorite, 200);
-
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }
@@ -77,11 +92,15 @@ class FavoriteController extends Controller
     public function destroy(Request $request, string $id)
     {
         try {
-            $favorite = \App\Models\Favorite::where('user_id', $request->user()->id)->where('film_id', $id)->firstOrFail();
+            $user = $request->user();
+            if ($user === null) {
+                abort(401);
+            }
+
+            $favorite = \App\Models\Favorite::where('user_id', $user->id)->where('film_id', $id)->firstOrFail();
             $favorite->delete();
 
             return response()->json(null, 204);
-
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }

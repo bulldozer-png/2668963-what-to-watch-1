@@ -15,7 +15,6 @@ class ReviewModelTest extends TestCase
 
         $this->assertInstanceOf(BelongsTo::class, $relation);
         $this->assertEquals('author_id', $relation->getForeignKeyName());
-
     }
 
     public function test_review_belongs_to_film()

@@ -11,8 +11,16 @@ use App\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
 {
-    public function __construct(private AuthService $authService) {}
+    public function __construct(private AuthService $authService)
+    {
+    }
 
+    /**
+     * Register a new user.
+     *
+     * @param RegisterRequest $request The validated registration request data.
+     * @return SuccessResponse|ErrorResponse
+     */
     public function register(RegisterRequest $request)
     {
         try {
@@ -22,6 +30,12 @@ class AuthController extends Controller
             return new ErrorResponse($e);
         }
     }
+    /**
+     * Authenticate a user and return a token.
+     *
+     * @param LoginRequest $request The validated login request data.
+     * @return SuccessResponse|ErrorResponse
+     */
     public function login(LoginRequest $request)
     {
         try {
@@ -31,6 +45,11 @@ class AuthController extends Controller
             return new ErrorResponse($e);
         }
     }
+    /**
+     * Logout the authenticated user.
+     *
+     * @return SuccessResponse|ErrorResponse
+     */
     public function logout()
     {
         try {

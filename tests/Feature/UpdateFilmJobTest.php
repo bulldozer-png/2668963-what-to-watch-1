@@ -18,7 +18,7 @@ class UpdateFilmJobTest extends TestCase
     public function test_update_film_job_creates_film_in_database()
     {
         $genre = Genre::factory()->create(['id' => 1]);
-        
+
         $mockMovieData = [
             'Title' => 'Test Film',
             'Plot' => 'Test Description',
@@ -29,19 +29,19 @@ class UpdateFilmJobTest extends TestCase
             'Runtime' => '120 min',
             'imdbRating' => '8.4',
         ];
-        
+
         $imdbId = 'tt12042730';
-        
+
         $this->mock(MovieRepositoryInterface::class, function (MockInterface $mock) use ($mockMovieData, $imdbId) {
             $mock->shouldReceive('findByImdbId')
                 ->with($imdbId)
                 ->once()
                 ->andReturn($mockMovieData);
         });
-        
+
         $job = new UpdateFilmJob($imdbId);
         $job->handle();
-        
+
         $this->assertDatabaseHas('films', [
             'imdb_id' => $imdbId,
             'title' => 'Test Film',
@@ -50,7 +50,7 @@ class UpdateFilmJobTest extends TestCase
             'director' => 'Test Director',
             'rating' => 8,
         ]);
-        
+
         $film = Film::where('imdb_id', $imdbId)->first();
         $this->assertNotNull($film);
         $this->assertEquals('https://example.com/poster.jpg', $film->big_image);
@@ -59,15 +59,15 @@ class UpdateFilmJobTest extends TestCase
     public function test_update_film_job_updates_existing_film()
     {
         $genre = Genre::factory()->create(['id' => 1]);
-        
+
         $imdbId = 'tt12042730';
-        
+
         $film = Film::factory()->create([
             'imdb_id' => $imdbId,
             'title' => 'Old Title',
             'genre_id' => 1,
         ]);
-        
+
         $mockMovieData = [
             'Title' => 'Updated Title',
             'Plot' => 'Updated Description',
@@ -78,17 +78,17 @@ class UpdateFilmJobTest extends TestCase
             'Runtime' => '130 min',
             'imdbRating' => '7.6',
         ];
-        
+
         $this->mock(MovieRepositoryInterface::class, function (MockInterface $mock) use ($mockMovieData, $imdbId) {
             $mock->shouldReceive('findByImdbId')
                 ->with($imdbId)
                 ->once()
                 ->andReturn($mockMovieData);
         });
-        
+
         $job = new UpdateFilmJob($imdbId);
         $job->handle();
-        
+
         $this->assertDatabaseHas('films', [
             'imdb_id' => $imdbId,
             'title' => 'Updated Title',
@@ -97,31 +97,31 @@ class UpdateFilmJobTest extends TestCase
             'director' => 'New Director',
             'rating' => 8,
         ]);
-        
+
         $this->assertEquals(1, Film::where('imdb_id', $imdbId)->count());
     }
 
     public function test_update_film_job_handles_missing_data()
     {
         Genre::factory()->create(['id' => 1]);
-        
+
         $imdbId = 'tt12042730';
-        
+
         $mockMovieData = [
             'Title' => 'Test Film',
             'Year' => '2000',
         ];
-        
+
         $this->mock(MovieRepositoryInterface::class, function (MockInterface $mock) use ($mockMovieData, $imdbId) {
             $mock->shouldReceive('findByImdbId')
                 ->with($imdbId)
                 ->once()
                 ->andReturn($mockMovieData);
         });
-        
+
         $job = new UpdateFilmJob($imdbId);
         $job->handle();
-        
+
         $this->assertDatabaseHas('films', [
             'imdb_id' => $imdbId,
             'title' => 'Test Film',
@@ -136,11 +136,11 @@ class UpdateFilmJobTest extends TestCase
     public function test_update_film_job_dispatched_to_queue()
     {
         Queue::fake();
-        
+
         $imdbId = 'tt12042730';
-        
+
         UpdateFilmJob::dispatch($imdbId);
-        
+
         Queue::assertPushed(UpdateFilmJob::class);
     }
 }

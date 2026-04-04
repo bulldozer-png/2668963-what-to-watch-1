@@ -22,7 +22,11 @@
         "laravel/sail": "^1.41",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.6",
-        "phpunit/phpunit": "^11.5.3"
+        "phpunit/phpunit": "^11.5.3",
+        "psalm/plugin-laravel": "^3.3",
+        "psalm/plugin-phpunit": "^0.19.6",
+        "squizlabs/php_codesniffer": "^4.0",
+        "vimeo/psalm": "^6.16"
     },
     "autoload": {
         "psr-4": {
@@ -52,6 +56,12 @@
         "test": [
             "@php artisan config:clear --ansi",
             "@php artisan test"
+        ],
+        "lint:phpcs": "phpcs --standard=.phpcs.xml app bootstrap config database resources routes tests",
+        "lint:psalm": "psalm",
+        "lint": [
+            "composer lint:phpcs",
+            "composer lint:psalm"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

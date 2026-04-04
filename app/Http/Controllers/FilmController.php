@@ -12,7 +12,9 @@ use Illuminate\Http\Request;
 
 class FilmController extends Controller
 {
-    public function __construct(private FilmStoreService $filmStoreService) {}
+    public function __construct(private FilmStoreService $filmStoreService)
+    {
+    }
 
     /**
      * Display a listing of the resource.
@@ -23,7 +25,6 @@ class FilmController extends Controller
             $films = Film::all();
 
             return response()->json($films, 200);
-
         } catch (\Throwable $e) {
             return response()->json([
                 'error' => $e->getMessage()
@@ -46,7 +47,6 @@ class FilmController extends Controller
 
             $film = $this->filmStoreService->store($data);
             return response()->json($film, 201);
-
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }
@@ -61,7 +61,6 @@ class FilmController extends Controller
             $film = Film::find($id);
 
             return response()->json($film, 200);
-
         } catch (\Throwable $e) {
             return response()->json([
                 'error' => $e->getMessage()
@@ -94,7 +93,6 @@ class FilmController extends Controller
             ]));
 
             return response()->json($film, 200);
-
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }
@@ -110,7 +108,6 @@ class FilmController extends Controller
             $film->delete();
 
             return response()->json(null, 204);
-
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }
