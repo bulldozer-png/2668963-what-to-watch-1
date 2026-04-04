@@ -14,6 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property \Illuminate\Database\Eloquent\Collection<int, Review> $reviews
  * @property \Illuminate\Database\Eloquent\Collection<int, Favorite> $favorites
  */
+
 class User extends Authenticatable
 {
     /** @template-use \Laravel\Sanctum\HasApiTokens<\Laravel\Sanctum\PersonalAccessToken> */
