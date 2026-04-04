@@ -74,7 +74,7 @@ class ReviewTest extends TestCase
 
     public function test_user_can_create_review()
     {
-        $user = User::factory()->create();  
+        $user = User::factory()->create();
         $genre = Genre::factory()->create();
         $film = Film::factory()->create(['genre_id' => $genre->id]);
 
@@ -100,7 +100,7 @@ class ReviewTest extends TestCase
 
     public function test_author_can_update_review()
     {
-        $user = User::factory()->create();  
+        $user = User::factory()->create();
         $genre = Genre::factory()->create();
         $film = Film::factory()->create(['genre_id' => $genre->id]);
 
@@ -131,7 +131,7 @@ class ReviewTest extends TestCase
     }
     public function test_author_can_delete_review()
     {
-        $user = User::factory()->create();  
+        $user = User::factory()->create();
         $genre = Genre::factory()->create();
         $film = Film::factory()->create(['genre_id' => $genre->id]);
 

@@ -12,7 +12,9 @@ use App\Http\Requests\ReviewStoreRequest;
 
 class ReviewController extends Controller
 {
-    public function __construct(private ReviewStoreService $reviewStoreService) {}
+    public function __construct(private ReviewStoreService $reviewStoreService)
+    {
+    }
     /**
      * Display a listing of the resource.
      */
@@ -21,7 +23,6 @@ class ReviewController extends Controller
         try {
             $reviews = Review::all();
             return response()->json($reviews, 200);
-
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }
@@ -35,8 +36,6 @@ class ReviewController extends Controller
         try {
             $review = $this->reviewStoreService->store($request->validated());
             return response()->json($review, 201);
-            
-
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }
@@ -51,7 +50,6 @@ class ReviewController extends Controller
             $reviews = Review::where('film_id', $id)->get();
 
             return response()->json($reviews, 200);
-
         } catch (\Throwable $e) {
             return response()->json([
                 'error' => $e->getMessage()
@@ -67,18 +65,12 @@ class ReviewController extends Controller
         try {
             Gate::authorize('update-review', $review);
             $review->update($request->validated());
-            
+
             return response()->json($review);
-
-
-            // return new SuccessResponse($data);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }
-        // } catch (\Throwable $e) {
-        //     dd($e->getMessage());
-        // }
     }
 
     /**
@@ -86,13 +78,11 @@ class ReviewController extends Controller
      */
     public function destroy(Review $review)
     {
-        try {   
+        try {
             Gate::authorize('delete-review', $review);
             $review->delete();
 
             return response()->json(['deleted' => true]);
-            
-            // return new SuccessResponse($data);
 
         } catch (\Throwable $e) {
             return new ErrorResponse($e);

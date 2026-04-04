@@ -31,7 +31,6 @@ return new class extends Migration
             $table->integer('rating');
 
             $table->primary('id');
-
         });
     }
 

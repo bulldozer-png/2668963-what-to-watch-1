@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Responses\ErrorResponse;
 use App\Http\Responses\SuccessResponse;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Cache;
 
 class PromoController extends Controller
 {
+    /**
+     * Get the current promo film.
+     *
+     * @return \Illuminate\Http\JsonResponse|ErrorResponse
+     */
     public function promoGet()
     {
         try {
@@ -24,12 +28,17 @@ class PromoController extends Controller
 
             $film = \App\Models\Film::first();
             return response()->json($film, 200);
-
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }
     }
-    
+
+    /**
+     * Set the promo film by ID.
+     *
+     * @param string $id The film ID to set as promo.
+     * @return \Illuminate\Http\JsonResponse|ErrorResponse
+     */
     public function promoSet(string $id)
     {
         try {
@@ -37,7 +46,6 @@ class PromoController extends Controller
             Cache::put('promo_film_id', $film->id, 86400);
 
             return response()->json($film, 200);
-
         } catch (\Throwable $e) {
             return new ErrorResponse($e);
         }

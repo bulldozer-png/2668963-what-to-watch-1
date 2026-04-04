@@ -11,15 +11,27 @@ use Illuminate\Queue\SerializesModels;
 
 class UpdateFilmJob implements ShouldQueue
 {
-    use Dispatchable, Queueable, SerializesModels;
+    use Dispatchable;
+    use Queueable;
+    use SerializesModels;
 
     private string $imdbId;
 
+    /**
+     * Create a new job instance.
+     *
+     * @param string $imdbId The IMDB ID of the film to update.
+     */
     public function __construct(string $imdbId)
     {
         $this->imdbId = $imdbId;
     }
 
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
     public function handle()
     {
         $repository = app(\App\Interface\MovieRepositoryInterface::class);
@@ -34,7 +46,7 @@ class UpdateFilmJob implements ShouldQueue
         $rating = intval(round(floatval($data['imdbRating'] ?? 0)));
         $rating = max(0, min(10, $rating));
 
-        $film = Film::updateOrCreate(
+        Film::updateOrCreate(
             ['imdb_id' => $this->imdbId],
             [
                 'title' => $data['Title'] ?? 'No title',

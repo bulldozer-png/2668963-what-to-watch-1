@@ -24,7 +24,7 @@ class FilmTest extends TestCase
     public function test_can_get_films()
     {
         $this->seed(FilmSeeder::class);
-        
+
         $response = $this->getJson('/api/films');
 
         $response->assertStatus(200)
